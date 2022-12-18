@@ -1,10 +1,10 @@
 <h1 align="center">
-  <img src="https://avatars1.githubusercontent.com/u/29598503?v=3&s=256" alt="[Project]">
+  <img src="https://raw.githubusercontent.com/logseq/logseq/master/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png" alt="Logseq">
   <br />
-  [Project]
+  Logseq
 </h1>
 
-<p align="center"><b>This is the snap for [Project]</b>, <i>“Single-line elevator pitch for your amazing snap”</i>. It works on Ubuntu, Fedora, Debian, and other major Linux
+<p align="center"><b>This is the snap for Logseq</b>, <i>“Single-line elevator pitch for your amazing snap”</i>. It works on Ubuntu, Fedora, Debian, and other major Linux
 distributions.</p>
 
 <!-- Uncomment and modify this when you are provided a build status badge
@@ -26,7 +26,7 @@ distributions.</p>
 
 ## Install
 
-    sudo snap install my-snap-name
+    sudo snap install logseq
 
 <!-- Uncomment and modify this when your snap is available on the store
 [![Get it from the Snap Store](https://snapcraft.io/static/images/badges/en/snap-store-white.svg)](https://snapcraft.io/my-snap-name)
@@ -39,12 +39,12 @@ distributions.</p>
 ![my-snap-name](screenshot.png?raw=true "my-snap-name")
 -->
 
-Snapcrafters ([join us](https://forum.snapcraft.io/t/snapcrafters-reboot/24625)) are working to land snap install documentation and the [snapcraft.yaml](https://github.com/snapcrafters/fork-and-rename-me/blob/master/snap/snapcraft.yaml) upstream so [Project] can authoritatively publish future releases.
+Snapcrafters ([join us](https://forum.snapcraft.io/t/snapcrafters-reboot/24625)) are working to land snap install documentation and the [snapcraft.yaml](https://github.com/snapcrafters/fork-and-rename-me/blob/master/snap/snapcraft.yaml) upstream so Logseq can authoritatively publish future releases.
 
   - [x] Click the green "Use this template" button above to create a new repository based on this template
   - [x] Give the newly created repository a sensible name, like `godzilla` if you're snapping the Godzilla software (*Note: Do not use `snap` in this name.*)
-  - [ ] Update the description of the repository to `Unofficial snap for [Project]`
-  - [ ] Update logos and references to `[Project]` and `[my-snap-name]`
+  - [x] Update the description of the repository to `Unofficial snap for [Project]`
+  - [x] Update logos and references to `[Project]` and `[my-snap-name]`
   - [ ] Create a snap that runs in `devmode`
   - [ ] Convert the snap to `strict` confinement, or `classic` confinement if it qualifies
   - [ ] Register the snap in the store, **using the preferred upstream name**
