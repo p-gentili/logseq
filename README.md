@@ -4,7 +4,7 @@
   Logseq
 </h1>
 
-<p align="center"><b>This is the snap for Logseq</b>, <i>“Single-line elevator pitch for your amazing snap”</i>. It works on Ubuntu, Fedora, Debian, and other major Linux
+<p align="center"><b>This is the snap for Logseq</b>, <i>“A privacy-first, open-source knowledge base that works on top of local plain-text Markdown and Org-mode files.”</i>. It works on Ubuntu, Fedora, Debian, and other major Linux
 distributions.</p>
 
 <!-- Uncomment and modify this when you are provided a build status badge
