@@ -15,6 +15,7 @@ parts:
     source-depth: 1
     source-tag: 0.9.14
     build-packages:
+      - curl
       - default-jdk
       - zip
     stage-packages:
