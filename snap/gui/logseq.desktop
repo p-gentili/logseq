@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Logseq Desktop
+Exec=logseq %U
+Terminal=false
+Type=Application
+Icon=${SNAP}/app/resources/app/icon.png
+Categories=Utility

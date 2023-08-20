@@ -1,15 +1,78 @@
-name: my-snap-name # you probably want to 'snapcraft register <name>'
-version: '0.1' # just for humans, typically '1.2+git' or '1.3.2'
-summary: Single-line elevator pitch for your amazing snap # 79 char long summary
+name: logseq
+base: core22
+adopt-info: logseq
+summary: Logseq is a privacy-first, open-source knowledge base.
 description: |
-  This is my-snap's description. You have a paragraph or two to tell the
-  most important story about your snap. Keep it under 100 words though,
-  we live in tweetspace and your description wants to look good in the snap
-  store.
+  Logseq is a privacy-first, open-source knowledge base that works on top of local plain-text Markdown and Org-mode files. Use it to write, organize and share your thoughts, keep your to-do list, and build your own digital garden.
 
+grade: stable
 confinement: devmode # use 'strict' once you have the right plugs and slots
 
 parts:
-  my-part:
-    # See 'snapcraft plugins'
+  logseq:
     plugin: nil
+    source: https://github.com/logseq/logseq.git
+    source-depth: 1
+    source-tag: 0.9.14
+    build-packages:
+      - default-jdk
+      - zip
+    stage-packages:
+      # - libasound2
+      # - libatk1.0-0
+      # - libatk-bridge2.0-0
+      # - libatspi2.0-0
+      # - libcairo2
+      # - libcups2
+      # - libcurl4
+      # - libdbus-1-3
+      # - libdrm2
+      # - libexpat1
+      # - libglib2.0-0
+      # - libgbm1 
+      # - libgtk-3-0
+      - libnss3
+      - libnspr4
+      # - libpango-1.0-0
+      # - libx11-6
+      # - libxcb1
+      # - libxcomposite1
+      # - libxdamage1 
+      # - libxext6
+      # - libxfixes3
+      # - libxkbcommon0
+      # - libxrandr2
+
+    override-pull: |
+      craftctl default
+      craftctl set version=$(git describe --tags)
+
+      set -x
+
+      # Install node
+      curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
+      apt-get install -y nodejs
+
+      # Install clojure at required version
+      curl -fsSL https://download.clojure.org/install/linux-install-1.10.1.763.sh | bash -
+
+    override-build: |
+      craftctl default
+
+      set -x
+
+      npm install --global yarn
+      yarn install
+
+      yarn release-electron &&\
+      mv ./static/out/Logseq-linux-* $SNAPCRAFT_PART_INSTALL/app &&\
+      chmod 755 $SNAPCRAFT_PART_INSTALL/app
+
+
+apps:
+  logseq:
+    command: app/Logseq
+    extensions:
+      - gnome
+    plugs:
+      - network
