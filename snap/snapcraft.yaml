@@ -6,7 +6,7 @@ description: |
   Logseq is a privacy-first, open-source knowledge base that works on top of local plain-text Markdown and Org-mode files. Use it to write, organize and share your thoughts, keep your to-do list, and build your own digital garden.
 
 grade: stable
-confinement: devmode # use 'strict' once you have the right plugs and slots
+confinement: strict
 
 parts:
   logseq:
@@ -48,8 +48,15 @@ parts:
 
 apps:
   logseq:
-    command: app/Logseq
+    command: app/Logseq --no-sandbox
     extensions:
       - gnome
     plugs:
       - network
+      - shmem
+      - home
+
+plugs:
+  shmem:
+    interface: shared-memory
+    private: true
