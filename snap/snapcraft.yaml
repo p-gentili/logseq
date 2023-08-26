@@ -40,14 +40,43 @@ parts:
 
       set -x
 
-      # workaround for build.snapcraft.io builds
+      # workaround for remote-build on launchpad
       # https://bugs.launchpad.net/bugs/1886861
       http_proxy=${http_proxy:-""}
       https_proxy=${https_proxy:-""}
       if [ -n "$http_proxy" ]; then
+
+        # Yarn / Npm
         export ELECTRON_GET_USE_PROXY=1
         export GLOBAL_AGENT_HTTP_PROXY="${http_proxy}"
         export GLOBAL_AGENT_HTTPS_PROXY="${http_proxy}"
+
+        host=$(echo "$http_proxy" | grep -oP '(?<=//)[^:/]+')
+        port=$(echo "$http_proxy" | grep -oP '(?<=:)[0-9]+')
+
+        # Clojure / JGit
+        export JAVA_TOOL_OPTIONS=" -Dhttps.proxyHost=${host} -Dhttps.proxyPort=${port}"
+
+        # Maven
+        mkdir -p $HOME/.m2
+        cat > $HOME/.m2/settings.xml <<EOF
+        <settings>
+          <proxies>
+            <proxy>
+              <id>remote-build-proxy</id>
+                <active>true</active>
+                <protocol>http</protocol>
+                <host>${host}</host>
+                <port>${port}</port>
+            </proxy>
+          </proxies>
+        </settings>
+      EOF
+
+        # TODO not working yet
+        npm config set proxy ${http_proxy}
+        npm config set https-proxy ${https_proxy}
+
       fi
 
       npm install --global yarn
