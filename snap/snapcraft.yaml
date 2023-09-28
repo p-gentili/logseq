@@ -49,6 +49,8 @@ parts:
 
 apps:
   logseq:
+    environment:
+      HOME: $SNAP_REAL_HOME
     command: app/Logseq --no-sandbox
     extensions:
       - gnome
@@ -56,8 +58,23 @@ apps:
       - network
       - shmem
       - home
+      - system-gitconfig
+      - user-gitconfig
+      - ssh-keys
 
 plugs:
   shmem:
     interface: shared-memory
     private: true
+  system-gitconfig:
+    interface: system-files
+    read:
+    - /etc/gitconfig
+  user-gitconfig:
+    interface: personal-files
+    read:
+    - $HOME/.gitconfig
+    - $HOME/.config/git/config
+  ssh-keys:
+    interface: ssh-keys
+
