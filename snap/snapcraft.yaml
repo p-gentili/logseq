@@ -58,23 +58,20 @@ apps:
       - network
       - shmem
       - home
-      - system-gitconfig
-      - user-gitconfig
+      - etc-gitconfig
+      - gitconfig
       - ssh-keys
 
 plugs:
   shmem:
     interface: shared-memory
     private: true
-  system-gitconfig:
+  etc-gitconfig:
     interface: system-files
     read:
     - /etc/gitconfig
-  user-gitconfig:
+  gitconfig:
     interface: personal-files
     read:
     - $HOME/.gitconfig
     - $HOME/.config/git/config
-  ssh-keys:
-    interface: ssh-keys
-
