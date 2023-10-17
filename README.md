@@ -20,7 +20,17 @@ distributions.</p>
 
 ## Install
 
-    sudo snap install logseq
+```bash
+sudo snap install logseq
+```
+
+### Using GIT sync
+
+In case you're using GIT sync with SSH authentication you may want to connect the `ssh-keys` interface with:
+
+```bash
+sudo snap connect logseq:ssh-keys
+```
 
 [![Get it from the Snap Store](https://snapcraft.io/static/images/badges/en/snap-store-black.svg)](https://snapcraft.io/logseq)
 
