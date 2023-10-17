@@ -26,9 +26,9 @@ sudo snap install logseq
 
 ### Using GIT sync
 
+In case you're using GIT sync with SSH authentication you may want to connect the `ssh-keys` interface with:
+
 ```bash
-sudo snap connect logseq:system-gitconfig
-sudo snap connect logseq:user-gitconfig
 sudo snap connect logseq:ssh-keys
 ```
 
