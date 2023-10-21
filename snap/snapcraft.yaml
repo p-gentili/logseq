@@ -49,8 +49,6 @@ parts:
 
 apps:
   logseq:
-    environment:
-      HOME: $SNAP_REAL_HOME
     command: app/Logseq --no-sandbox
     extensions:
       - gnome
