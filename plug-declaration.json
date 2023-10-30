@@ -1,0 +1,4 @@
+{
+    "system-files": {"allow-installation": true},
+    "personal-files": {"allow-installation": true}
+}
