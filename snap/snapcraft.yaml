@@ -59,6 +59,7 @@ apps:
       - etc-gitconfig
       - gitconfig
       - ssh-keys
+      - audio-playback
 
 plugs:
   shmem:
