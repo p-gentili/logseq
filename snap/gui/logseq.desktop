@@ -3,5 +3,5 @@ Name=Logseq Desktop
 Exec=logseq %U
 Terminal=false
 Type=Application
-Icon=${SNAP}/app/resources/app/icon.png
+Icon=${SNAP}/snap/gui/icon.svg
 Categories=Utility
