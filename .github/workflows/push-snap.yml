@@ -2,7 +2,7 @@ name: Push snap to snapstore edge channel
 
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
   workflow_dispatch:
     
 jobs:
