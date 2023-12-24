@@ -13,7 +13,7 @@ parts:
     plugin: nil
     source: https://github.com/logseq/logseq.git
     source-depth: 1
-    source-tag: '0.10.1'
+    source-tag: '0.10.2'
     build-packages:
       - curl
       - default-jdk
