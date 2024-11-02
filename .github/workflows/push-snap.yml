@@ -6,15 +6,36 @@ on:
   workflow_dispatch:
     
 jobs:
-  build:
+  publish_amd64:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - uses: snapcore/action-build@v1
-      id: build
-    - uses: snapcore/action-publish@v1
-      env:
-        SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.STORE_LOGIN }}
-      with:
-        snap: ${{ steps.build.outputs.snap }}
-        release: edge
+      - uses: actions/checkout@v4
+
+      - uses: snapcore/action-build@v1
+        id: build_amd64
+
+      - uses: snapcore/action-publish@v1
+        env:
+          SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.STORE_LOGIN }}
+        with:
+          snap: ${{ steps.build_amd64.outputs.snap }}
+          release: edge
+
+  publish_arm64:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-qemu-action@v1
+
+      - uses: diddlesnaps/snapcraft-multiarch-action@v1
+        id: build_arm64
+        with:
+          architecture: arm64
+
+      - uses: snapcore/action-publish@v1
+        env:
+          SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.STORE_LOGIN }}
+        with:
+          snap: ${{ steps.build_arm64.outputs.snap }}
+          release: edge
