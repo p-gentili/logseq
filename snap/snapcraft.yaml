@@ -17,6 +17,7 @@ parts:
     build-packages:
       - curl
       - default-jdk
+      - libgif-dev
       - zip
     stage-packages:
       - libnss3
@@ -41,6 +42,7 @@ parts:
       set -x
 
       npm install --global yarn
+      yarn config set network-timeout 1000000
       yarn install
 
       yarn release-electron &&\
