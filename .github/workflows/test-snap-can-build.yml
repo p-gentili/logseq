@@ -5,18 +5,36 @@ on:
     branches: [ main ]
     
 jobs:
-  build:
+  build-amd64:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       - uses: snapcore/action-build@v1
-        id: build
+        id: build_amd64
 
       - uses: diddlesnaps/snapcraft-review-action@v1
         with:
-          snap: ${{ steps.build.outputs.snap }}
+          snap: ${{ steps.build_amd64.outputs.snap }}
           isClassic: 'false'
           plugs: ./plug-declaration.json
           # slots: ./slot-declaration.json
+
+  build-arm64:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-qemu-action@v1
+
+      - uses: diddlesnaps/snapcraft-multiarch-action@v1
+        id: build_arm64
+        with:
+          architecture: arm64
+
+      - uses: diddlesnaps/snapcraft-review-action@v1
+        with:
+          snap: ${{ steps.build_arm64.outputs.snap }}
+          isClassic: 'false'
+          plugs: ./plug-declaration.json
