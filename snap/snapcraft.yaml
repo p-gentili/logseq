@@ -62,6 +62,7 @@ apps:
       - gitconfig
       - ssh-keys
       - audio-playback
+      - removable-media
 
 plugs:
   shmem:
