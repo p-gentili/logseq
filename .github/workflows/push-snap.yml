@@ -4,7 +4,7 @@ on:
   push:
     branches: [ main ]
   workflow_dispatch:
-    
+
 jobs:
   publish_amd64:
     runs-on: ubuntu-latest
@@ -22,16 +22,13 @@ jobs:
           release: edge
 
   publish_arm64:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04-arm
 
     steps:
       - uses: actions/checkout@v4
-      - uses: docker/setup-qemu-action@v1
 
-      - uses: diddlesnaps/snapcraft-multiarch-action@v1
+      - uses: snapcore/action-build@v1
         id: build_arm64
-        with:
-          architecture: arm64
 
       - uses: snapcore/action-publish@v1
         env:
