@@ -1,4 +1,4 @@
-name: Test snap can be built on x86_64
+name: Test snap can be built
 
 on:
   pull_request:
