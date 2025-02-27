@@ -1,40 +1,25 @@
-name: Test snap can be built on x86_64
+name: Test snap can be built
 
 on:
   pull_request:
     branches: [ main ]
-    
-jobs:
-  build-amd64:
-    runs-on: ubuntu-latest
 
+jobs:
+  build-and-check:
+    strategy:
+      fail-fast: false
+      matrix:
+        runner: [ubuntu-24.04, ubuntu-24.04-arm]
+
+    runs-on: "${{ matrix.runner }}"
     steps:
       - uses: actions/checkout@v4
 
       - uses: snapcore/action-build@v1
-        id: build_amd64
+        id: build
 
       - uses: diddlesnaps/snapcraft-review-action@v1
         with:
-          snap: ${{ steps.build_amd64.outputs.snap }}
-          isClassic: 'false'
-          plugs: ./plug-declaration.json
-          # slots: ./slot-declaration.json
-
-  build-arm64:
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v4
-      - uses: docker/setup-qemu-action@v1
-
-      - uses: diddlesnaps/snapcraft-multiarch-action@v1
-        id: build_arm64
-        with:
-          architecture: arm64
-
-      - uses: diddlesnaps/snapcraft-review-action@v1
-        with:
-          snap: ${{ steps.build_arm64.outputs.snap }}
+          snap: ${{ steps.build.outputs.snap }}
           isClassic: 'false'
           plugs: ./plug-declaration.json
