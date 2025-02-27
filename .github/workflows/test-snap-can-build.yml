@@ -11,9 +11,9 @@ jobs:
       matrix:
         include:
           - runner: ubuntu-24.04
-            arch: amd64
+            id: build_amd64
           - runner: ubuntu-24.04-arm
-            arch: arm64
+            id: build_arm64
 
     runs-on: "${{ matrix.runner }}"
 
@@ -21,10 +21,10 @@ jobs:
       - uses: actions/checkout@v4
 
       - uses: snapcore/action-build@v1
-        id: build_${{ matrix.arch }}
+        id: ${{ matrix.id }}
 
       - uses: diddlesnaps/snapcraft-review-action@v1
         with:
-          snap: ${{ steps.build_${{ matrix.arch }}.outputs.snap }}
+          snap: ${{ steps.${{ matrix.id }}.outputs.snap }}
           isClassic: 'false'
           plugs: ./plug-declaration.json
