@@ -6,33 +6,27 @@ on:
   workflow_dispatch:
 
 jobs:
-  publish_amd64:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
+  build-and-publish:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - runner: ubuntu-24.04
+            arch: amd64
+          - runner: ubuntu-24.04-arm
+            arch: arm64
 
-      - uses: snapcore/action-build@v1
-        id: build_amd64
-
-      - uses: snapcore/action-publish@v1
-        env:
-          SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.STORE_LOGIN }}
-        with:
-          snap: ${{ steps.build_amd64.outputs.snap }}
-          release: edge
-
-  publish_arm64:
-    runs-on: ubuntu-24.04-arm
+    runs-on: ${{ matrix.runner }}
 
     steps:
       - uses: actions/checkout@v4
 
       - uses: snapcore/action-build@v1
-        id: build_arm64
+        id: build_${{ matrix.arch }}
 
       - uses: snapcore/action-publish@v1
         env:
           SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.STORE_LOGIN }}
         with:
-          snap: ${{ steps.build_arm64.outputs.snap }}
+          snap: ${{ steps.build_${{ matrix.arch }}.outputs.snap }}
           release: edge

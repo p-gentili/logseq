@@ -5,32 +5,26 @@ on:
     branches: [ main ]
 
 jobs:
-  build-amd64:
-    runs-on: ubuntu-latest
+  build-and-check:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - runner: ubuntu-24.04
+            arch: amd64
+          - runner: ubuntu-24.04-arm
+            arch: arm64
+
+    runs-on: ${{ matrix.runner }}
 
     steps:
       - uses: actions/checkout@v4
 
       - uses: snapcore/action-build@v1
-        id: build_amd64
+        id: build_${{ matrix.arch }}
 
       - uses: diddlesnaps/snapcraft-review-action@v1
         with:
-          snap: ${{ steps.build_amd64.outputs.snap }}
-          isClassic: 'false'
-          plugs: ./plug-declaration.json
-
-  build-arm64:
-    runs-on: ubuntu-24.04-arm
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: snapcore/action-build@v1
-        id: build_arm64
-
-      - uses: diddlesnaps/snapcraft-review-action@v1
-        with:
-          snap: ${{ steps.build_arm64.outputs.snap }}
+          snap: ${{ steps.build_${{ matrix.arch }}.outputs.snap }}
           isClassic: 'false'
           plugs: ./plug-declaration.json
