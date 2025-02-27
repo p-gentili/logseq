@@ -9,22 +9,17 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        include:
-          - runner: ubuntu-24.04
-            id: build_amd64
-          - runner: ubuntu-24.04-arm
-            id: build_arm64
+        runner: [ubuntu-24.04, ubuntu-24.04-arm]
 
     runs-on: "${{ matrix.runner }}"
-
     steps:
       - uses: actions/checkout@v4
 
       - uses: snapcore/action-build@v1
-        id: ${{ matrix.id }}
+        id: build
 
       - uses: diddlesnaps/snapcraft-review-action@v1
         with:
-          snap: ${{ steps.${{ matrix.id }}.outputs.snap }}
+          snap: ${{ steps.build.outputs.snap }}
           isClassic: 'false'
           plugs: ./plug-declaration.json

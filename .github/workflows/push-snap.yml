@@ -10,23 +10,18 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        include:
-          - runner: ubuntu-24.04
-            id: build_amd64
-          - runner: ubuntu-24.04-arm
-            id: build_arm64
+        runner: [ubuntu-24.04, ubuntu-24.04-arm]
 
     runs-on: "${{ matrix.runner }}"
-
     steps:
       - uses: actions/checkout@v4
 
       - uses: snapcore/action-build@v1
-        id: ${{ matrix.id }}
+        id: build
 
       - uses: snapcore/action-publish@v1
         env:
           SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.STORE_LOGIN }}
         with:
-          snap: ${{ steps.${{ matrix.id }}.outputs.snap }}
+          snap: ${{ steps.build.outputs.snap }}
           release: edge
