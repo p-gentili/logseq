@@ -1,0 +1,65 @@
+#!/bin/bash
+# Wrapper script for Logseq to handle Wayland compatibility
+#
+# Electron 38+ (used by Logseq 0.10.15+) requires xdg-activation-v1 protocol
+# for proper Wayland support. This protocol was introduced in wayland-protocols 1.21.
+#
+# Ubuntu 20.04 ships with wayland-protocols 1.20 which lacks this protocol,
+# causing issues when running on Wayland. This wrapper detects older systems
+# and forces X11 (via XWayland) for compatibility.
+
+EXTRA_ARGS=()
+
+# Minimum wayland-protocols version that has xdg-activation-v1 support
+MIN_WAYLAND_PROTOCOLS_VERSION="1.21"
+
+# Function to compare version strings
+version_gte() {
+    # Returns 0 (true) if $1 >= $2
+    printf '%s\n%s\n' "$2" "$1" | sort -V -C
+}
+
+# Function to get wayland-protocols version
+get_wayland_protocols_version() {
+    local version=""
+
+    # Try dpkg-query first (works on Debian/Ubuntu systems)
+    if command -v dpkg-query &> /dev/null; then
+        version=$(dpkg-query -W -f='${Version}' wayland-protocols 2>/dev/null | cut -d'-' -f1)
+    fi
+
+    # If dpkg didn't work, try rpm
+    if [ -z "$version" ] && command -v rpm &> /dev/null; then
+        version=$(rpm -q --queryformat '%{VERSION}' wayland-protocols 2>/dev/null)
+    fi
+
+    # If still empty, try to detect from protocol files
+    if [ -z "$version" ]; then
+        # Check for xdg-activation-v1 protocol file (introduced in 1.21)
+        if [ -f "/usr/share/wayland-protocols/staging/xdg-activation/xdg-activation-v1.xml" ]; then
+            # Protocol exists, assume at least 1.21
+            version="1.21"
+        else
+            # Protocol doesn't exist, assume old version
+            version="1.20"
+        fi
+    fi
+
+    echo "$version"
+}
+
+# Check if we're running on Wayland
+if [ -n "$WAYLAND_DISPLAY" ]; then
+    wayland_protocols_version=$(get_wayland_protocols_version)
+
+    if [ -n "$wayland_protocols_version" ]; then
+        if ! version_gte "$wayland_protocols_version" "$MIN_WAYLAND_PROTOCOLS_VERSION"; then
+            # wayland-protocols is older than 1.21, force X11 via XWayland
+            echo "Logseq: Detected wayland-protocols $wayland_protocols_version (< $MIN_WAYLAND_PROTOCOLS_VERSION)" >&2
+            echo "Logseq: Forcing X11 mode for compatibility with Electron 38+" >&2
+            EXTRA_ARGS+=("--ozone-platform=x11")
+        fi
+    fi
+fi
+
+exec "$SNAP/app/Logseq" --no-sandbox "${EXTRA_ARGS[@]}" "$@"

@@ -9,6 +9,12 @@ grade: stable
 confinement: strict
 
 parts:
+  launcher:
+    plugin: dump
+    source: snap/local
+    organize:
+      logseq-wrapper: bin/logseq-wrapper
+
   logseq:
     plugin: nil
     source: https://github.com/logseq/logseq.git
@@ -51,7 +57,7 @@ parts:
 
 apps:
   logseq:
-    command: app/Logseq --no-sandbox
+    command: bin/logseq-wrapper
     extensions:
       - gnome
     plugs:
