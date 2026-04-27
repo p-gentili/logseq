@@ -6,20 +6,54 @@ on:
   workflow_dispatch:
 
 jobs:
+  detect-changes:
+    runs-on: ubuntu-latest
+    outputs:
+      projects: ${{ steps.set.outputs.projects }}
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+
+      - if: github.event_name != 'workflow_dispatch'
+        uses: dorny/paths-filter@d1c1ffe0248fe513906c8e24db8ea791d46f8590 # v3
+        id: filter
+        with:
+          filters: |
+            snap:
+              - 'snap/**'
+            snap-og:
+              - 'snap-og/**'
+
+      - id: set
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo 'projects=["snap","snap-og"]' >> "$GITHUB_OUTPUT"
+          else
+            echo 'projects=${{ steps.filter.outputs.changes }}' >> "$GITHUB_OUTPUT"
+          fi
+
   build-and-publish:
+    needs: detect-changes
+    if: needs.detect-changes.outputs.projects != '[]'
     strategy:
       fail-fast: false
       matrix:
+        project: ${{ fromJSON(needs.detect-changes.outputs.projects) }}
         runner: [ubuntu-24.04, ubuntu-24.04-arm]
 
     runs-on: "${{ matrix.runner }}"
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
 
-      - uses: snapcore/action-build@v1
+      - uses: snapcore/action-build@3bdaa03e1ba6bf59a65f84a751d943d549a54e79 # v1
         id: build
+        with:
+          path: ${{ matrix.project == 'snap' && '.' || matrix.project }}
 
-      - uses: snapcore/action-publish@v1
+      - if: matrix.project == 'snap-og'
+        run: echo "Skipping publish for snap-og — og track not yet provisioned (built ${{ steps.build.outputs.snap }})"
+
+      - if: matrix.project != 'snap-og'
+        uses: snapcore/action-publish@214b86e5ca036ead1668c79afb81e550e6c54d40 # v1
         env:
           SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.STORE_LOGIN }}
         with:
