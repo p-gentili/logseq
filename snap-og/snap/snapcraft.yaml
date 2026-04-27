@@ -1,0 +1,79 @@
+name: logseq
+base: core22
+adopt-info: logseq
+summary: Logseq is a privacy-first, open-source knowledge base.
+description: |
+  Logseq is a privacy-first, open-source knowledge base that works on top of local plain-text Markdown and Org-mode files. Use it to write, organize and share your thoughts, keep your to-do list, and build your own digital garden.
+
+grade: stable
+confinement: strict
+
+parts:
+  logseq:
+    plugin: nil
+    source: https://github.com/logseq/og.git
+    source-depth: 1
+    source-tag: '1.0.0'
+    build-packages:
+      - curl
+      - default-jdk
+      - libgif-dev
+      - zip
+    stage-packages:
+      - libnss3
+      - libnspr4
+
+    override-pull: |
+      craftctl default
+      craftctl set version=$(git describe --tags)
+
+      set -x
+
+      # Install node
+      curl -fsSL https://deb.nodesource.com/setup_22.x | bash -
+      apt-get install -y nodejs
+
+      # Install clojure at required version
+      curl -fsSL https://download.clojure.org/install/linux-install-1.11.1.1413.sh | bash -
+
+    override-build: |
+      craftctl default
+
+      set -x
+
+      npm install --global yarn
+      yarn config set network-timeout 1000000
+      yarn install
+
+      yarn cljs:release && yarn release-electron &&\
+      mv ./static/out/Logseq-linux-* $SNAPCRAFT_PART_INSTALL/app &&\
+      chmod 755 $SNAPCRAFT_PART_INSTALL/app
+
+apps:
+  logseq:
+    command: app/Logseq --no-sandbox
+    extensions:
+      - gnome
+    plugs:
+      - network
+      - shmem
+      - home
+      - etc-gitconfig
+      - gitconfig
+      - ssh-keys
+      - audio-playback
+      - removable-media
+
+plugs:
+  shmem:
+    interface: shared-memory
+    private: true
+  etc-gitconfig:
+    interface: system-files
+    read:
+    - /etc/gitconfig
+  gitconfig:
+    interface: personal-files
+    read:
+    - $HOME/.gitconfig
+    - $HOME/.config/git/config
