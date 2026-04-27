@@ -46,12 +46,12 @@ parts:
       yarn install
 
       yarn cljs:release && yarn release-electron &&\
-      mv ./static/out/Logseq-linux-* $SNAPCRAFT_PART_INSTALL/app &&\
+      mv ./static/out/Logseq-OG-linux-* $SNAPCRAFT_PART_INSTALL/app &&\
       chmod 755 $SNAPCRAFT_PART_INSTALL/app
 
 apps:
   logseq:
-    command: app/Logseq --no-sandbox
+    command: app/Logseq-OG --no-sandbox
     extensions:
       - gnome
     plugs:
