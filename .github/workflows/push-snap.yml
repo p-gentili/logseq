@@ -4,6 +4,15 @@ on:
   push:
     branches: [ main ]
   workflow_dispatch:
+    inputs:
+      snap:
+        description: 'Build & publish the main snap'
+        type: boolean
+        default: true
+      snap_og:
+        description: 'Build & publish the OG snap'
+        type: boolean
+        default: true
 
 jobs:
   detect-changes:
@@ -26,7 +35,10 @@ jobs:
       - id: set
         run: |
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-            echo 'projects=["snap","snap-og"]' >> "$GITHUB_OUTPUT"
+            projects=()
+            [ "${{ inputs.snap }}" = "true" ] && projects+=('"snap"')
+            [ "${{ inputs.snap_og }}" = "true" ] && projects+=('"snap-og"')
+            IFS=,; echo "projects=[${projects[*]}]" >> "$GITHUB_OUTPUT"
           else
             echo 'projects=${{ steps.filter.outputs.changes }}' >> "$GITHUB_OUTPUT"
           fi
