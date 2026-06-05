@@ -33,3 +33,26 @@ sudo snap connect logseq:ssh-keys
 [![Get it from the Snap Store](https://snapcraft.io/static/images/badges/en/snap-store-black.svg)](https://snapcraft.io/logseq)
 
 ([Don't have snapd installed?](https://snapcraft.io/docs/core/install))
+
+## Logseq OG
+
+[Logseq OG](https://github.com/logseq/og) is the original, file-based version of Logseq
+that works on top of local plain-text Markdown and Org-mode files. It's preserved for users
+who prefer it over the newer database-based release. It's published to the `og` track of this
+same snap, so you can run it without affecting your default Logseq install. To install it:
+
+```bash
+sudo snap install logseq --channel=og
+```
+
+If you already have Logseq installed, switch to it with:
+
+```bash
+sudo snap refresh logseq --channel=og
+```
+
+To go back to the default release, refresh to the `latest` track:
+
+```bash
+sudo snap refresh logseq --channel=latest
+```

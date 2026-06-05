@@ -50,7 +50,12 @@ jobs:
           path: ${{ matrix.project == 'snap' && '.' || matrix.project }}
 
       - if: matrix.project == 'snap-og'
-        run: echo "Skipping publish for snap-og — og track not yet provisioned (built ${{ steps.build.outputs.snap }})"
+        uses: snapcore/action-publish@214b86e5ca036ead1668c79afb81e550e6c54d40 # v1
+        env:
+          SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.STORE_LOGIN }}
+        with:
+          snap: ${{ steps.build.outputs.snap }}
+          release: og/edge
 
       - if: matrix.project != 'snap-og'
         uses: snapcore/action-publish@214b86e5ca036ead1668c79afb81e550e6c54d40 # v1
