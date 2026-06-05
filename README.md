@@ -30,10 +30,6 @@ In case you're using GIT sync with SSH authentication you may want to connect th
 sudo snap connect logseq:ssh-keys
 ```
 
-[![Get it from the Snap Store](https://snapcraft.io/static/images/badges/en/snap-store-black.svg)](https://snapcraft.io/logseq)
-
-([Don't have snapd installed?](https://snapcraft.io/docs/core/install))
-
 ## Logseq OG
 
 [Logseq OG](https://github.com/logseq/og) is the original, file-based version of Logseq
@@ -56,3 +52,7 @@ To go back to the default release, refresh to the `latest` track:
 ```bash
 sudo snap refresh logseq --channel=latest
 ```
+
+[![Get it from the Snap Store](https://snapcraft.io/static/images/badges/en/snap-store-black.svg)](https://snapcraft.io/logseq)
+
+([Don't have snapd installed?](https://snapcraft.io/docs/core/install))
