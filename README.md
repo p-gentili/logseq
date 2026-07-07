@@ -7,6 +7,9 @@
 <p align="center"><b>This is the snap for Logseq</b>, <i>“A privacy-first, open-source knowledge base that works on top of local plain-text Markdown and Org-mode files.”</i>. It works on Ubuntu, Fedora, Debian, and other major Linux
 distributions.</p>
 
+> [!NOTE]
+> **This repository is archived.** The Logseq snap is now maintained upstream. Please direct new issues and contributions there.
+
 <a href="https://snapcraft.io/logseq">
   <img alt="logseq" src="https://snapcraft.io/logseq/badge.svg" />
 </a>
